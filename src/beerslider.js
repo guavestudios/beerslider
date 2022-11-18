@@ -54,7 +54,7 @@ export class BeerSlider {
         if ( !this.revealElement ) {
             return
         }
-        this.loadedBoth().then( 
+        this.loadedBoth().then(
             () => {
                 this.init()
             },
@@ -62,7 +62,7 @@ export class BeerSlider {
                 console.error('Some errors occurred and images are not loaded.')
             }
         )
-    } 
+    }
     addElement (tag, attributes) {
         const el = document.createElement(tag)
         Object.keys(attributes).forEach( (key) => {
@@ -79,11 +79,23 @@ export class BeerSlider {
         eventTypes.forEach( (i) => {
             this.range.addEventListener( i, () => {this.move()} )
         })
-        window.addEventListener('resize', () => {this.setImgWidth()})
+        this.boundResizeHandler = this.resizeHandler.bind(this)
+        window.addEventListener('resize', this.boundResizeHandler)
+    }
+    resizeHandler () {
+        this.setImgWidth()
     }
     move () {
         this.revealContainer.style.width = `${this.range.value}%`
         this.handle.style.left = `${this.range.value}%`
         this.range.setAttribute('aria-valuenow', this.range.value)
+    }
+    destroy () {
+        this.element.classList.remove(`${this.prefix}-ready`)
+        this.revealElement.style.width = ''
+        this.revealContainer.style.width = ''
+        this.element.removeChild(this.range)
+        this.element.removeChild(this.handle)
+        window.removeEventListener('resize', this.boundResizeHandler)
     }
 }
