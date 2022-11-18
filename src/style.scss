@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $prefix : "beer";
 $initial-reveal: 50%;
 
@@ -34,7 +36,7 @@ $initial-reveal: 50%;
   opacity: 0;
   transition: opacity 0.35s;
   & > :first-child {
-    width: 100%*100%/$initial-reveal;
+    width: math.div(100%*100%, $initial-reveal);
     max-width: none;
     height: 100%;
   }
