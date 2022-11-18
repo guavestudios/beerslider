@@ -2508,9 +2508,13 @@ var BeerSlider = exports.BeerSlider = function () {
                     _this2.move();
                 });
             });
-            window.addEventListener('resize', function () {
-                _this2.setImgWidth();
-            });
+            this.boundResizeHandler = this.resizeHandler.bind(this);
+            window.addEventListener('resize', this.boundResizeHandler);
+        }
+    }, {
+        key: 'resizeHandler',
+        value: function resizeHandler() {
+            this.setImgWidth();
         }
     }, {
         key: 'move',
@@ -2518,6 +2522,16 @@ var BeerSlider = exports.BeerSlider = function () {
             this.revealContainer.style.width = this.range.value + '%';
             this.handle.style.left = this.range.value + '%';
             this.range.setAttribute('aria-valuenow', this.range.value);
+        }
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            this.element.classList.remove(this.prefix + '-ready');
+            this.revealElement.style.width = '';
+            this.revealContainer.style.width = '';
+            this.element.removeChild(this.range);
+            this.element.removeChild(this.handle);
+            window.removeEventListener('resize', this.boundResizeHandler);
         }
     }]);
 
